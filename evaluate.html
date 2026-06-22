@@ -162,17 +162,6 @@ footer { text-align: center; padding: 28px; font-size: .78rem; color: var(--text
 <div class="container">
   <a href="/" class="back-link">← 返回导师库</a>
 
-  <!-- Server status banner -->
-  <div class="server-banner" id="serverBanner" style="display:none">
-    <div class="server-banner-inner">
-      <strong>⚠️ 评估服务未启动</strong>
-      <p>在终端运行以下命令启动本地服务器（需 Python 3）：</p>
-      <code id="serverCmd">cd /path/to/site && python3 server.py</code>
-      <button class="copy-btn" onclick="copyCmd()">📋 复制命令</button>
-      <p class="small">启动后刷新本页面即可使用 AI 评估</p>
-    </div>
-  </div>
-
   <section class="input-section">
     <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。建议包含：
 
@@ -306,7 +295,7 @@ function evaluate() {
   submitBtn.disabled = true;
   submitBtn.textContent = '⏳ 评估中…';
 
-  fetch('https://phd-eval-proxy.flawless-orange.workers.dev', {
+  fetch('https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
