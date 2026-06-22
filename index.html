@@ -853,6 +853,34 @@ window._currentSups = supervisors;
 const EVAL_API = 'https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate';
 let evalDone = false;
 
+async function handlePDF(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('pdfStatus').style.display = 'block';
+  document.getElementById('pdfStatus').textContent = '解析 PDF 中…';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(item => item.str).join(' ') + '\n';
+    }
+    document.getElementById('evalBgInput').value = text.trim();
+    document.getElementById('evalBgInput').style.display = 'block';
+    document.getElementById('pdfStatus').textContent = '✅ PDF 已解析 — ' + text.length + ' 字';
+    document.getElementById('evalPanel').classList.add('active');
+  } catch(e) {
+    document.getElementById('pdfStatus').textContent = '❌ 解析失败，请手动粘贴文字';
+  }
+}
+
+// === AI Evaluation ===
+const EVAL_API = 'https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate';
+let evalDone = false;
+
+
 window.runEval = async function() {
   const bg = document.getElementById('evalBgInput').value.trim();
   if (!bg || bg.length < 20) { alert('请至少写 20 字背景信息'); return; }
