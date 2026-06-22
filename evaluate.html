@@ -126,6 +126,15 @@ textarea::placeholder { color: #c4b5d0; }
 }
 .error-msg.visible { display: block; }
 
+/* Server banner */
+.server-banner { background: #fff7ed; border: 2px solid #fdba74; border-radius: 16px; padding: 18px 22px; margin-bottom: 24px; }
+.server-banner-inner strong { color: #c2410c; }
+.server-banner-inner p { margin: 6px 0; color: #9a3412; font-size: .88rem; }
+.server-banner-inner code { display: block; background: #1e293b; color: #38bdf8; padding: 10px 14px; border-radius: 8px; font-size: .85rem; margin: 8px 0; word-break: break-all; }
+.server-banner .copy-btn { background: #ea580c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: .82rem; }
+.server-banner .small { font-size: .78rem; color: #9a3412; margin-top: 4px; }
+.content-hidden { opacity: .3; pointer-events: none; }
+
 /* Back link */
 .back-link {
   display: inline-flex; align-items: center; gap: 6px;
@@ -152,6 +161,17 @@ footer { text-align: center; padding: 28px; font-size: .78rem; color: var(--text
 
 <div class="container">
   <a href="/" class="back-link">← 返回导师库</a>
+
+  <!-- Server status banner -->
+  <div class="server-banner" id="serverBanner" style="display:none">
+    <div class="server-banner-inner">
+      <strong>⚠️ 评估服务未启动</strong>
+      <p>在终端运行以下命令启动本地服务器（需 Python 3）：</p>
+      <code id="serverCmd">cd /path/to/site && python3 server.py</code>
+      <button class="copy-btn" onclick="copyCmd()">📋 复制命令</button>
+      <p class="small">启动后刷新本页面即可使用 AI 评估</p>
+    </div>
+  </div>
 
   <section class="input-section">
     <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。建议包含：
@@ -190,7 +210,7 @@ footer { text-align: center; padding: 28px; font-size: .78rem; color: var(--text
       <select id="directionSelect">
         <option value="medical" selected>🧬 药学 & 医学生信（默认）</option>
         <option value="both">两个方向都评估</option>
-        <option value="environmental">🌊 环境微生物 & 水处理</option>
+        <option value="medical">🧬 药学 & 医学生信</option>
       </select>
     </div>
   </div>
@@ -219,6 +239,45 @@ footer { text-align: center; padding: 28px; font-size: .78rem; color: var(--text
 </footer>
 
 <script>
+// Auto-detect server
+async function checkServer() {
+  try {
+    const resp = await fetch('/api/evaluate', {
+      method: 'OPTIONS',
+      signal: AbortSignal.timeout(2000)
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function copyCmd() {
+  const cmd = document.getElementById('serverCmd').textContent;
+  navigator.clipboard.writeText(cmd).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ 已复制！';
+    setTimeout(() => btn.textContent = '📋 复制命令', 2000);
+  });
+}
+
+// On page load, detect server and set command path
+(async () => {
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const serverRunning = await checkServer();
+
+  if (!isLocal || !serverRunning) {
+    document.getElementById('serverBanner').style.display = 'block';
+    if (isLocal) {
+      document.getElementById('serverCmd').textContent = 'cd ' + window.location.pathname.replace(/\/evaluate\.html$/, '').replace(/^\//, '') + ' && python3 server.py';
+    } else {
+      // GitHub Pages - give them the clone command
+      document.getElementById('serverCmd').textContent = 'git clone https://github.com/csw021014-cell/medical-phd-finder.git && cd medical-phd-finder && python3 server.py';
+    }
+    document.getElementById('submitBtn').disabled = true;
+  }
+})();
+
 const bgInput = document.getElementById('bgInput');
 const charCount = document.getElementById('charCount');
 bgInput.addEventListener('input', () => {
