@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>药学/医学生信 PhD 导师库 — NTU · 澳洲 · 新西兰</title>
+<style>
+:root {
+  --bg: #fcf9f6;
+  --card-bg: #ffffff;
+  --accent: #8b2e4d;
+  --accent-light: #c44a6f;
+  --accent-soft: #f9eaf0;
+  --text: #2d1b23;
+  --text-muted: #6b5b63;
+  --border: #e8ddd8;
+  --amber: #d4880f;
+  --green: #3a7d5f;
+  --blue: #3568a0;
+  --teal: #1a7a6d;
+  --tag-bg: #f5f0ed;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg, #1a0a14 0%, #3d1b2e 40%, #8b2e4d 80%, #c44a6f 100%);
+  color:white;padding:72px 20px 56px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%, rgba(255,255,255,.06) 0%, transparent 50%),
+             radial-gradient(circle at 20% 80%, rgba(255,200,180,.08) 0%, transparent 40%);
+}
+.hero h1{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:800;letter-spacing:-0.02em;position:relative;margin-bottom:12px}
+.hero p{font-size:1.05rem;opacity:.85;max-width:640px;margin:0 auto;position:relative}
+.hero .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px;position:relative}
+.hero .badge{
+  padding:7px 16px;border-radius:999px;font-size:.8rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);backdrop-filter:blur(6px);
+}
+
+.container{max-width:1320px;margin:0 auto;padding:0 20px}
+
+/* Stats */
+.stats-bar{
+  display:flex;justify-content:center;gap:28px;flex-wrap:wrap;padding:20px 0;margin-top:-20px;position:relative;z-index:2;
+}
+.stat-item{
+  background:var(--card-bg);border-radius:16px;padding:18px 26px;
+  box-shadow:0 2px 14px rgba(0,0,0,.04);text-align:center;min-width:110px;
+}
+.stat-item .num{font-size:1.9rem;font-weight:800;color:var(--accent);line-height:1}
+.stat-item .label{font-size:.78rem;color:var(--text-muted);margin-top:5px}
+
+/* Filters */
+.filters{padding:24px 0;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.search-box{flex:1 1 320px;max-width:480px;position:relative}
+.search-box input{
+  width:100%;padding:11px 16px 11px 42px;border-radius:999px;
+  border:2px solid var(--border);font-size:.92rem;outline:none;transition:border-color .2s;background:white;
+}
+.search-box input:focus{border-color:var(--accent-light)}
+.search-box .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1.05rem}
+.filter-btn{
+  padding:10px 22px;border-radius:999px;border:2px solid var(--border);
+  background:white;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;
+  color:var(--text-muted);white-space:nowrap;
+}
+.filter-btn:hover{border-color:var(--accent-light);color:var(--accent)}
+.filter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
+
+.region-tabs{
+  display:flex;gap:4px;justify-content:center;margin:4px 0 28px;
+  background:var(--tag-bg);border-radius:999px;padding:4px;width:fit-content;margin-left:auto;margin-right:auto;
+}
+.region-tab{
+  padding:9px 26px;border-radius:999px;border:none;background:transparent;
+  font-size:.86rem;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;
+}
+.region-tab.active{background:white;color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:22px;padding-bottom:44px}
+
+/* Card */
+.card{
+  background:var(--card-bg);border-radius:20px;padding:26px;
+  box-shadow:0 2px 18px rgba(0,0,0,.04);transition:transform .2s, box-shadow .2s;
+  display:flex;flex-direction:column;position:relative;border:1px solid var(--border);
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.card .uni-badge{
+  display:inline-block;padding:5px 12px;border-radius:999px;font-size:.73rem;font-weight:700;
+  letter-spacing:.02em;margin-bottom:12px;width:fit-content;
+}
+.uni-ntu{background:#fdf0d5;color:#6b3c0a}
+.uni-au{background:#d5e8fd;color:#1a3f70}
+.uni-nz{background:#d0f5e8;color:#0a4a30}
+
+.card h3{font-size:1.15rem;font-weight:700;color:#1a0a14;margin-bottom:3px}
+.card .title{font-size:.82rem;color:var(--text-muted);margin-bottom:12px}
+.card .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.card .tag{font-size:.7rem;padding:4px 10px;border-radius:999px;background:var(--tag-bg);color:var(--text-muted);font-weight:500}
+
+.card .links{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;flex-grow:1}
+.card .links a{color:var(--accent-light);text-decoration:none;font-size:.83rem;font-weight:500;display:flex;align-items:center;gap:6px;transition:color .15s}
+.card .links a:hover{color:var(--accent);text-decoration:underline}
+.card .links a .fa-icon{width:18px;text-align:center;font-size:.85rem}
+
+.card .status{font-size:.78rem;padding:6px 12px;border-radius:999px;font-weight:600;margin-top:auto;text-align:center}
+.status-open{background:#d5f5e3;color:#0a4a30}
+.status-active{background:#d5e8fd;color:#1a3f70}
+.status-hot{background:#fdf0d5;color:#6b3c0a}
+
+.card .note{font-size:.75rem;color:var(--text-muted);margin-top:8px;line-height:1.45;border-top:1px solid var(--border);padding-top:10px}
+
+/* Advice */
+.advice-section{
+  background:linear-gradient(135deg,#1a0a14,#3d1b2e,#5c2a42);
+  color:white;margin-top:16px;padding:60px 0;
+}
+.advice-section h2{text-align:center;font-size:1.85rem;font-weight:800;margin-bottom:8px}
+.advice-section .subtitle{text-align:center;opacity:.8;margin-bottom:40px;font-size:.92rem}
+.advice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;max-width:1200px;margin:0 auto;padding:0 20px}
+.advice-card{
+  background:rgba(255,255,255,.07);backdrop-filter:blur(8px);border-radius:20px;
+  padding:26px;border:1px solid rgba(255,255,255,.1);
+}
+.advice-card h4{font-size:1.05rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.advice-card h4 .num{
+  display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;
+  border-radius:50%;background:rgba(255,255,255,.16);font-size:.85rem;font-weight:800;flex-shrink:0;
+}
+.advice-card p,.advice-card li{font-size:.85rem;opacity:.86;line-height:1.7}
+.advice-card ul{padding-left:17px}
+.advice-card li{margin-bottom:5px}
+.advice-card li::marker{color:#f0a0b8}
+
+footer{text-align:center;padding:28px;font-size:.78rem;color:var(--text-muted)}
+
+.empty{grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--text-muted)}
+.empty .big{font-size:2.8rem;margin-bottom:10px}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .stats-bar{gap:10px}
+  .stat-item{padding:12px 16px;min-width:auto}
+  .stat-item .num{font-size:1.3rem}
+  .hero{padding:44px 14px 36px}
+  .filters{padding:14px 6px}
+}
+
+/* Share banner */
+.share-bar{
+  background:var(--accent-soft);border:1px solid rgba(139,46,77,.15);
+  border-radius:14px;padding:14px 20px;margin:20px 0;text-align:center;
+  font-size:.88rem;color:var(--accent);font-weight:500;
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>🧬 药学 & 医学生信 PhD 导师库</h1>
+  <p>覆盖 NTU 新加坡 · 澳大利亚 · 新西兰 主要大学 & 研究所<br>方向：计算生物学 · 单细胞组学 · 药理学 · 癌症基因组学 · 组织/器官疾病</p>
+  <div class="badges">
+    <span class="badge">🧪 单细胞组学</span>
+    <span class="badge">💊 药物发现</span>
+    <span class="badge">🫀 组织/器官疾病</span>
+    <span class="badge">🖥️ 计算生物学</span>
+    <span class="badge">🧫 空间组学</span>
+  </div>
+</header>
+
+<div class="container">
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item"><div class="num" id="totalCount">0</div><div class="label">导师/机会总数</div></div>
+    <div class="stat-item"><div class="num" id="ntuCount">0</div><div class="label">NTU 新加坡</div></div>
+    <div class="stat-item"><div class="num" id="auCount">0</div><div class="label">澳大利亚</div></div>
+    <div class="stat-item"><div class="num" id="nzCount">0</div><div class="label">新西兰</div></div>
+    <div class="stat-item"><div class="num" id="openCount">0</div><div class="label">🔥 明确在招</div></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="filters">
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索导师姓名、研究方向、机构…">
+    </div>
+    <button class="filter-btn active" data-tag="all">全部</button>
+    <button class="filter-btn" data-tag="单细胞">🧪 单细胞组学</button>
+    <button class="filter-btn" data-tag="癌症">🎗️ 癌症</button>
+    <button class="filter-btn" data-tag="药物发现">💊 药物发现</button>
+    <button class="filter-btn" data-tag="心血管">🫀 心血管/代谢</button>
+    <button class="filter-btn" data-tag="神经">🧠 神经退行</button>
+    <button class="filter-btn" data-tag="2026在招">🔥 2026 在招</button>
+  </div>
+  <div class="region-tabs">
+    <button class="region-tab active" data-region="all">🌏 全部</button>
+    <button class="region-tab" data-region="NTU">🇸🇬 NTU 新加坡</button>
+    <button class="region-tab" data-region="Australia">🇦🇺 澳大利亚</button>
+    <button class="region-tab" data-region="New Zealand">🇳🇿 新西兰</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="grid" id="cardGrid"></div>
+</div>
+
+<section class="advice-section">
+  <div class="container">
+    <h2>📋 申请建议与策略</h2>
+    <p class="subtitle">针对 2025–2026 年医学生信/药学 PhD 申请整理</p>
+    <div class="advice-grid">
+      <div class="advice-card">
+        <h4><span class="num">1</span> 医学生信的核心竞争力</h4>
+        <ul>
+          <li><strong>硬技能：</strong>R/Python (Seurat/Scanpy 单细胞分析)、Linux/HPC、统计学基础、至少熟悉一种组学 (scRNA-seq, ATAC-seq, spatial)</li>
+          <li><strong>加分项：</strong>已发表 (哪怕是 co-author)、GitHub 有自己写的 pipeline、参加过 hackathon</li>
+          <li><strong>不需要：</strong>医学学位——大多数生信 PhD 导师不要求你有临床背景，但你要愿意学生物</li>
+          <li>如果有条件，可以在申请前做一个公开数据集的分析发到 bioRxiv，这比空口说"我有兴趣"强100倍</li>
+        </ul>
+      </div>
+      <div class="advice-card">
+        <h4><span class="num">2</span> 时间线与申请渠道</h4>
+        <ul>
+          <li><strong>澳洲 (含 Garvan/WEHI/Baker)：</strong>主轮 RTP 奖学金 8–10 月截止（次年 2–3 月入学）；研究所 (WEHI/Garvan) 可能有自己的截止日期</li>
+          <li><strong>NTU：</strong>1 月 / 8 月两季，Research Scholarship 提前 4–6 月提交；LKCMedicine 和 SBS 有独立 PhD programme</li>
+          <li><strong>新西兰：</strong>UoA 主轮 8–11 月；Otago 全年可申但奖学金有轮次</li>
+          <li>WEHI/Garvan/Baker 的 PhD 通过 affiliated 大学 (UniMelb/UNSW/Monash) 注册，但要先联系导师</li>
+        </ul>
+      </div>
+      <div class="advice-card">
+        <h4><span class="num">3</span> 推荐申请的优先级</h4>
+        <ul>
+          <li>🔴 <strong>最推荐 (2026 明确在招+有钱+平台顶级)：</strong>Garvan Weatheritt (2 个项目/年招)、WEHI Chen/Papenfuss (多组学整合)、Garvan Swarbrick (单细胞 isoform atlas)</li>
+          <li>🟡 <strong>高价值 (平台好但需确认名额)：</strong>WEHI Davidson (NHMRC Emerging Leader)、Garvan Masle-Farquhar (NHMRC $688k 新经费)、Baker Institute El-Osta (表观基因组学)</li>
+          <li>🟢 <strong>值得关注 (新 PI/新经费)：</strong>Garvan NHMRC 新入职的 Curtis Cai (2026 从 Karolinska 来)、Ruebena Dawes (2026 从 Oxford 来)、Kylie James (IBD/结直肠癌单细胞)</li>
+        </ul>
+      </div>
+      <div class="advice-card">
+        <h4><span class="num">4</span> 奖学金 & 经费现实</h4>
+        <ul>
+          <li><strong>澳洲 RTP 全奖：</strong>≈A$37k/年 + 免学费；国际生 GPA 需 85–88+/100 竞争；UNSW 部分奖学金可达 A$50k/年 (EMBL Australia)</li>
+          <li><strong>NTU Research Scholarship：</strong>S$2,200–2,700/月 + 免学费</li>
+          <li><strong>NZ UoA Doctoral Scholarship：</strong>≈NZ$33k/年 + 免学费；GPA 门槛 7.0/9.0</li>
+          <li><strong>关键策略：</strong>有导师课题经费 (ARC/NHMRC/Marsden) 支持的 PhD 可以绕过 GPA 排名——所以套磁时优先问"有没有 funded position"</li>
+        </ul>
+      </div>
+      <div class="advice-card">
+        <h4><span class="num">5</span> 套磁与面试</h4>
+        <ul>
+          <li>邮件标题：<em>"PhD Enquiry – [scRNA-seq / Spatial Transcriptomics / Drug Discovery] – [Your Name]"</em></li>
+          <li>正文：提及导师 1–2 篇论文的 <strong>具体方法或发现</strong>引起你的兴趣（别泛泛说 "I'm interested in your research"）</li>
+          <li>面试几乎必有 coding challenge 或让你讲一个分析项目——提前准备一个自己做的单细胞/组学分析 case study</li>
+          <li>WEHI/Garvan 面试偏西式：他们想看你能不能独立设计和 debug 一个分析流程</li>
+        </ul>
+      </div>
+      <div class="advice-card">
+        <h4><span class="num">6</span> 中国学生特别提示</h4>
+        <ul>
+          <li>澳洲 2025 年后签证 GS (Genuine Student) 评估趋严，研究计划里要体现出对回国后职业路径的清晰思考</li>
+          <li>NTU 对 985/211 本科生 GPA 85+ 较为友好；双非需要强力论文或竞赛奖项</li>
+          <li>新西兰签证友好但生信方向全奖名额少——建议同时申 CSC (中国留学基金委) 做 backup</li>
+          <li>很多医学生信 PhD 并不要求 TOEFL 很高 (≥90 通常够)，但 IELTS 6.5 (小分 6.0) 是澳洲/新西兰硬底线</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>数据整理于 2025–2026 申请季 · 信息来自各大学 & 研究所官方页面 · 建议联系前核实最新状态</p>
+  <p style="margin-top:4px">🤖 Generated with Claude Code</p>
+</footer>
+
+<script>
+const supervisors = [
+  // ===== NTU SINGAPORE =====
+  {
+    id:"ntu-01",
+    name:"Asst Prof. Li Yinghui",
+    title:"Nanyang Assistant Professor, School of Biological Sciences",
+    university:"NTU Singapore",
+    school:"School of Biological Sciences (SBS)",
+    region:"NTU",
+    research:["乳腺癌转移","基因组调控","增强子劫持","3D 染色质构象"],
+    tags:["癌症","基因组学","转录调控","2026在招"],
+    links:[
+      {label:"NTU IAS 报道",url:"https://www.ntu.edu.sg/ias/news-events/news/detail/tweaking-genome-regulation-in-breast-cancer-to-discover-new-drivers-of-metastasis-by-nanyang-asst-prof-li-yinghui",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 Nanyang Assistant Prof (高经费新 PI)",
+    note:"Nanyang Assistant Professorship 是 NTU 最高荣誉级青年教职 (≈$1M 启动经费)。做乳腺癌转移的基因组机制——3D 染色质构象+增强子调控，强烈推荐。"
+  },
+  {
+    id:"ntu-02",
+    name:"LKCMedicine — Biomedical Data Science (Faculty Position Open)",
+    title:"Professor/Associate Professor of Health Informatics (Recruiting)",
+    university:"NTU Singapore",
+    school:"Lee Kong Chian School of Medicine (LKCMedicine)",
+    region:"NTU",
+    research:["健康信息学","生物医学数据科学","临床信息学","精准医学","AI 诊断"],
+    tags:["药物发现","生物医学数据","AI","2026在招"],
+    links:[
+      {label:"NTU LKCMedicine 招聘页",url:"https://aijobs.net/job/266071-professorassociate-professor-of-health-informatics-lkcmedicine/",icon:"🏛️"},
+      {label:"LKCMedicine PhD Programme",url:"https://www.ntu.edu.sg/medicine/education/graduate-programmes",icon:"🎓"}
+    ],
+    status:"hot",
+    statusText:"🔥 学院正在招 health informatics 教职——由此带 PhD",
+    note:"LKCMedicine 新设健康信息学方向，正在招 Prof/Assoc Prof。新入职 PI 通常带 PhD 名额。建议关注后续具体 PI 入职并直接联系。"
+  },
+  {
+    id:"ntu-03",
+    name:"SCELSE — Biofilm & Microbiome Programme",
+    title:"PhD Programme at Singapore Centre for Environmental Life Sciences Engineering",
+    university:"NTU Singapore",
+    school:"SCELSE (跨学院联合中心)",
+    region:"NTU",
+    research:["微生物组与疾病","生物膜感染","宿主-微生物互作","宏基因组","抗生素抗性"],
+    tags:["药物发现","感染","微生物组","生信"],
+    links:[
+      {label:"SCELSE 主页",url:"https://scelse.sg",icon:"🏛️"},
+      {label:"SCELSE PhD Projects (存档)",url:"https://eresources.nlb.gov.sg/webarchives/wayback/20190310163616/http://www.scelse.sg/Page/phd-projects",icon:"📄"}
+    ],
+    status:"active",
+    statusText:"可联系套磁",
+    note:"SCELSE 微生物组+宿主互作方向与药学/感染疾病交叉。有生信背景可做宏基因组与病原检测。联系 SCELSE 各 PI。"
+  },
+  {
+    id:"ntu-04",
+    name:"NTU SBS — Biomedical Data Science Programme",
+    title:"Tenure-track Assistant/Associate Professor — Biomedical Data Science",
+    university:"NTU Singapore",
+    school:"School of Biological Sciences (SBS)",
+    region:"NTU",
+    research:["生物医学数据科学","计算生物学","系统生物学","AI in biology"],
+    tags:["药物发现","生信","AI","2026在招"],
+    links:[
+      {label:"NTU SBS 招聘",url:"https://sciences.academickeys.com/job/autorywh/refer_a_colleague.php?job[IDX]=260467",icon:"🏛️"},
+      {label:"NTU SBS Research",url:"https://www.ntu.edu.sg/sbs/research",icon:"🔬"}
+    ],
+    status:"hot",
+    statusText:"🔥 SBS 正在大量招计算生物学教职",
+    note:"SBS 明确列出了 biomedical data science 为战略招聘方向。新入职 PI 通常有配套 PhD 名额，建议关注 SBS 官网更新。"
+  },
+
+  // ===== AUSTRALIA =====
+  {
+    id:"au-01",
+    name:"A/Prof. Robert Weatheritt",
+    title:"Group Leader — Neurotranscriptomics Lab, Garvan Institute",
+    university:"Garvan Institute of Medical Research / UNSW Sydney",
+    school:"Neurotranscriptomics Lab",
+    region:"Australia",
+    research:["单细胞长读长测序","可变剪接","ALS/FTD 神经退行","CRISPR Perturb-Seq","AlphaFold 整合"],
+    tags:["单细胞","神经","生信","2026在招"],
+    links:[
+      {label:"Algorithms for sc Nanopore (FindAPhD)",url:"https://www.findaphd.com/phds/project/developing-algorithms-for-single-cell-long-read-nanopore-sequencing/?p189458",icon:"🎓"},
+      {label:"CRISPR Perturb-Seq for ALS",url:"https://www.academicjobs.com/university-jobs/discovering-therapeutic-targets-for-als-using-crispr-dcas9-single-cell-perturb-seq-in-patient-derived-motor-neurons-darlinghurst-new-south-wales/664162",icon:"🧬"},
+      {label:"ScholarNexus 项目",url:"https://scholarnexus.ai/position/Phd-In-Neurotranscriptomics-And-Computational-Biology?id=d498452c-f895-44eb-a0c4-b4b842f7bfa5",icon:"🔬"}
+    ],
+    status:"hot",
+    statusText:"🔥 2 个项目年招，A$43k–50k/年 奖学金",
+    note:"Garvan 最明确的生信 PhD 机会。A: 开发单细胞 nanopore 算法+AlphaFold 整合；B: ALS 患者 iPSC 的 CRISPR Perturb-Seq。r.weatheritt@garvan.org.au。强烈推荐！"
+  },
+  {
+    id:"au-02",
+    name:"Dr. Yunshun Chen",
+    title:"Laboratory Head — Bioinformatics & Spatial Omics, WEHI",
+    university:"WEHI (Walter and Eliza Hall Institute) / University of Melbourne",
+    school:"Bioinformatics Division / Blood Cells and Blood Cancer Division",
+    region:"Australia",
+    research:["空间转录组学","单细胞组学","机器学习 (CNN/GNN)","乳腺癌","edgeR 开发者"],
+    tags:["单细胞","癌症","空间组学","AI"],
+    links:[
+      {label:"WEHI Researcher Page",url:"https://www.wehi.edu.au/researcher/yunshun-chen/",icon:"🏛️"},
+      {label:"Spatial-Omics ML Project",url:"https://www.wehi.edu.au/project/enhancing-spatial-omics-with-machine-learning-integrating-histology-and-transcriptomics-for-robust-cell-type-annotation/",icon:"🔬"},
+      {label:"Spatial-Omics Cancer Project",url:"https://www.wehi.edu.au/project/bioinformatics-strategies-for-optimal-interpretation-of-spatial-omics-data-in-cancer/",icon:"🎓"}
+    ],
+    status:"hot",
+    statusText:"🔥 多个 PhD 项目开放 (空间组学+ML)",
+    note:"edgeR 开发者之一！NHMRC Investigator Grant 持有者。做空间转录组 (Visium/Xenium/MERSCOPE) + CNN/GNN。乳腺癌方向。bioinformatics 学生的 dream supervisor。"
+  },
+  {
+    id:"au-03",
+    name:"A/Prof. Tony Papenfuss",
+    title:"Laboratory Head — Bioinformatics, WEHI",
+    university:"WEHI / University of Melbourne",
+    school:"Bioinformatics Division",
+    region:"Australia",
+    research:["癌症进化","多组学整合","染色体不稳定性","黑色素瘤/前列腺癌/罕见癌"],
+    tags:["单细胞","癌症","多组学","生信"],
+    links:[
+      {label:"Papenfuss Lab",url:"https://www.wehi.edu.au/laboratory/papenfuss-lab/",icon:"🌐"},
+      {label:"Multiomics Integration Project",url:"https://www.wehi.edu.au/project/methods-for-multiomics-integration/",icon:"🔬"}
+    ],
+    status:"active",
+    statusText:"欢迎 PhD 联系咨询",
+    note:"WEHI Bioinformatics 部门的 computational biology 方向。做单细胞+空间+bulk 多组学整合的 ML 方法、癌症进化、罕见癌。"
+  },
+  {
+    id:"au-04",
+    name:"Dr. Nadia Davidson",
+    title:"NHMRC Emerging Leadership Fellow, WEHI",
+    university:"WEHI / University of Melbourne",
+    school:"Bioinformatics / Blood Cells and Blood Cancer",
+    region:"Australia",
+    research:["长读长转录组学","转录 isoform 发现","诊断基因组学","单细胞生物学"],
+    tags:["单细胞","癌症","生信","诊断"],
+    links:[
+      {label:"WEHI Researcher Page",url:"https://www.wehi.edu.au/researcher/nadia-davidson/",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"NHMRC Emerging Leader——有经费",
+    note:"NHMRC Emerging Leadership Fellow。做 long-read 转录组学、isoform 发现和诊断应用。跨生信和血癌 division。"
+  },
+  {
+    id:"au-05",
+    name:"Prof. Alex Swarbrick",
+    title:"Senior Principal Research Fellow, Garvan Institute",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Cancer Research Division",
+    region:"Australia",
+    research:["单细胞长读长转录组学","乳腺癌","前列腺癌","空间转录组","Broad Institute 合作"],
+    tags:["单细胞","癌症","空间组学","2026在招"],
+    links:[
+      {label:"Garvan PhD G12: sc Isoform Atlas",url:"https://garvanpostgrad.applynow.net.au/jobs/G12",icon:"🎓"},
+      {label:"Garvan Swarbrick Group",url:"https://www.garvan.org.au/people/researchers/alex-swarbrick",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 单细胞 isoform atlas 项目在招 (G12)",
+    note:"和 Broad Institute (MIT/Harvard) 合作，做人乳腺癌/前列腺癌的单细胞+空间长读长转录组 isoform atlas。平台顶级，产出 Nature 系列常规。"
+  },
+  {
+    id:"au-06",
+    name:"Dr. Etienne Masle-Farquhar",
+    title:"Group Leader — Arthritis & Tissue Immunogenomics Lab, Garvan",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Immunogenomics Lab",
+    region:"Australia",
+    research:["类风湿关节炎单细胞","银屑病关节炎","eQTL","CHIP 驱动的痛风","免疫-神经元互作"],
+    tags:["单细胞","免疫","炎症","组织疾病","2026在招"],
+    links:[
+      {label:"UNSW Research Profile",url:"https://research.unsw.edu.au/people/dr-etienne-noel-masle-farquhar",icon:"🏛️"},
+      {label:"Garvan People",url:"https://www.garvan.org.au/people/researchers",icon:"🔬"}
+    ],
+    status:"hot",
+    statusText:"🔥 2026 NHMRC $688k 新经费——招 PhD",
+    note:"2026 获 NHMRC Investigator Grant $688k。做关节炎 (RA/PsA/痛风) 单细胞基因组学、eQTL、免疫-神经互作。1 学生 2026.6 已 start，还在招。e.masle-farquhar@garvan.org.au"
+  },
+  {
+    id:"au-07",
+    name:"A/Prof. Ankur Sharma",
+    title:"Laboratory Head — Translational Genomics, Garvan Institute",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Translational Genomics Program",
+    region:"Australia",
+    research:["肝癌微环境","oncofetal ecosystem","空间转录组","单细胞基因组","免疫治疗"],
+    tags:["单细胞","癌症","空间组学","免疫"],
+    links:[
+      {label:"UNSW Research Profile",url:"https://research.unsw.edu.au/people/associate-professor-ankur-sharma",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"2024 新入职 Garvan，可联系",
+    note:"2024 从新加坡到 Garvan。发现肝癌 oncofetal ecosystem (Cell/Nature Cancer/Immunity 发表)，转化到 IIb 期临床试验。NHMRC/MRFF/CSL 资助。"
+  },
+  {
+    id:"au-08",
+    name:"Prof. Sarah Kummerfeld",
+    title:"Chief Scientific Officer; Cancer Genomics & Biomarkers",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Kinghorn Cancer Centre",
+    region:"Australia",
+    research:["癌症基因组学","生物标志物","机器学习","数据科学","单细胞技术平台"],
+    tags:["癌症","单细胞","AI","药物发现","诊断"],
+    links:[
+      {label:"Garvan Profile",url:"https://www.garvan.org.au/people/researchers/sarah-kummerfeld",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"可联系咨询 PhD 机会",
+    note:"CSO 级别，做癌症基因组学+ML/AI 诊断。掌控 Garvan 基因组学平台 (单细胞/空间等技术)。可能 co-supervise PhD。"
+  },
+  {
+    id:"au-09",
+    name:"A/Prof. Christine Chaffer",
+    title:"Head — Cancer Cell Plasticity Lab, Garvan Institute",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Kinghorn Cancer Centre",
+    region:"Australia",
+    research:["癌细胞可塑性","肿瘤休眠","化疗耐药","CRISPR 功能基因组","空间转录组"],
+    tags:["单细胞","癌症","药物耐药","空间组学"],
+    links:[
+      {label:"UNSW Research Profile",url:"https://research.unsw.edu.au/people/associate-professor-christine-louise-chaffer",icon:"🏛️"},
+      {label:"Garvan PhD G13: Translatome",url:"https://garvanpostgrad.applynow.net.au/jobs/G13",icon:"🎓"}
+    ],
+    status:"hot",
+    statusText:"🔥 带 6 个 PhD + G13 项目在招",
+    note:"主持 $25M 国家乳腺癌基金会 AllClear 加速器。做癌细胞可塑性/休眠/耐药的翻译组重编程。已带 6 个 PhD，有项目持续招。"
+  },
+  {
+    id:"au-10",
+    name:"Dr. Heloisa Zaccaron Milioli",
+    title:"Research Officer, Cancer Cell Plasticity Lab",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Kinghorn Cancer Centre",
+    region:"Australia",
+    research:["翻译组学","Ribo-Seq","RNA-Seq","蛋白质组整合分析","化疗耐药"],
+    tags:["癌症","药物耐药","生信","2026在招"],
+    links:[
+      {label:"Garvan PhD G13 Project",url:"https://garvanpostgrad.applynow.net.au/jobs/G13",icon:"🎓"}
+    ],
+    status:"hot",
+    statusText:"🔥 G13 项目 Co-supervisor (2026 在招)",
+    note:"G13 项目做翻译组重编程克服化疗耐药——Ribo/RNA-Seq+蛋白质组整合分析。适合有生信背景的学生。h.milioli@garvan.org.au"
+  },
+  {
+    id:"au-11",
+    name:"Dr. Kylie James",
+    title:"Group Leader — Gut Diseases, Garvan Institute (NHMRC 新资助)",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"Immunogenomics Lab",
+    region:"Australia",
+    research:["IBD (炎症性肠病)","结直肠癌","单细胞组学","肠道微生物单细胞图谱"],
+    tags:["单细胞","癌症","肠道疾病","微生物组"],
+    links:[
+      {label:"Garvan NHMRC News",url:"https://www.garvan.org.au/news-resources/news/next-wave-of-medical-research-backed-by-national-grants",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"NHMRC 新资助——可联系",
+    note:"做肠道疾病 (IBD/结直肠癌) 单细胞+微生物 mapping。2026 年 NHMRC 新一轮资助获得者。新 PI 阶段，通常急需 PhD。"
+  },
+  {
+    id:"au-12",
+    name:"Dr. Curtis Cai",
+    title:"Incoming Group Leader — T-cell Biology (Arriving 2026)",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"(Arriving from Karolinska Institutet, Sweden)",
+    region:"Australia",
+    research:["遗传免疫疾病","T 细胞生物学","单细胞 RNA-seq","免疫缺陷"],
+    tags:["单细胞","免疫","遗传病"],
+    links:[
+      {label:"Garvan NHMRC News",url:"https://www.garvan.org.au/news-resources/news/next-wave-of-medical-research-backed-by-national-grants",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 2026 从 Karolinska 来——新 PI 招人",
+    note:"从 Karolinska Institutet 到 Garvan (2026)。做基因免疫疾病+T 细胞+单细胞 RNA-seq。新 PI 黄金套磁窗口。"
+  },
+  {
+    id:"au-13",
+    name:"Dr. Ruebena Dawes",
+    title:"Incoming Group Leader — RNA Splicing & Rare Disease (Arriving 2026)",
+    university:"Garvan Institute / UNSW Sydney",
+    school:"(Arriving from University of Oxford)",
+    region:"Australia",
+    research:["RNA 剪接","罕见遗传病诊断","大规模基因组学"],
+    tags:["癌症","生信","诊断","罕见病"],
+    links:[
+      {label:"Garvan NHMRC News",url:"https://www.garvan.org.au/news-resources/news/next-wave-of-medical-research-backed-by-national-grants",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 2026 从 Oxford 来——新 PI 招人",
+    note:"从 Oxford 到 Garvan (2026)。做 RNA 剪接+罕见病基因组诊断。适合有 RNA-seq/剪接分析背景的学生。"
+  },
+  {
+    id:"au-14",
+    name:"Prof. Sam El-Osta",
+    title:"Head — Epigenomics & Human Disease, Baker Institute",
+    university:"Baker Heart and Diabetes Institute / Monash University",
+    school:"Epigenomics and Human Disease",
+    region:"Australia",
+    research:["表观基因组学","DNA 甲基化","糖尿病肾病","心血管疾病","慢性肾病 (CKD)"],
+    tags:["心血管","表观组学","糖尿病","2026在招"],
+    links:[
+      {label:"PhD Project: DNA Methylation CKD",url:"https://findanexpert.unimelb.edu.au/opportunity/1700-phd-project--translational-development-of-dna-methylation-risk-scores-for-personalised-ckd-prediction-in-type-1-diabetes",icon:"🎓"},
+      {label:"Baker Institute Research",url:"https://baker.edu.au/research",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 有 PhD 项目 (表观组学+CKD)",
+    note:"Baker Institute 表观基因组学 head。有具体 PhD 项目——DNA 甲基化风险评分用于 T1D 慢性肾病预测——做 biomarker+个性化医学。"
+  },
+  {
+    id:"au-15",
+    name:"Dr. Corey Giles",
+    title:"Research Fellow — Metabolomics & Lipidomics, Baker Institute",
+    university:"Baker Heart and Diabetes Institute / Monash University",
+    school:"Metabolomics Lab",
+    region:"Australia",
+    research:["代谢组学","脂质组学","心血管代谢疾病","生物信息学","质谱数据分析"],
+    tags:["心血管","代谢","生信"],
+    links:[
+      {label:"Baker Institute Profile",url:"https://baker.edu.au/about/~/link.aspx?_id=B6EA5CA659CF4443A2E30EC3231CB04E&_z=z",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"可联系咨询 PhD",
+    note:"做质谱代谢组学/脂质组学数据分析——适合有生信+代谢背景的学生。Baker 做心血管代谢疾病是澳洲第一。"
+  },
+  {
+    id:"au-16",
+    name:"Dr. Aleksandar Dakic",
+    title:"Senior Research Officer, Baker Institute",
+    university:"Baker Heart and Diabetes Institute / Monash University",
+    school:"(Epigenomics / Genomics group)",
+    region:"Australia",
+    research:["基因组学","表观遗传学","糖尿病并发症","生物信息学"],
+    tags:["心血管","表观组学","生信"],
+    links:[
+      {label:"Baker Publications",url:"https://baker.edu.au/research/staff/aleksandar-dakic",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"可联系 (与 El-Osta 组合作)",
+    note:"与 Prof El-Osta 组的表观基因组方向合作。Baker 有多个 computational biology 相关 senior staff 可 co-supervise。"
+  },
+  {
+    id:"au-17",
+    name:"Monash MIPS — Drug Discovery Biology PhD Programme",
+    title:"Multiple research groups in Drug Discovery Biology, Medicinal Chemistry, Drug Delivery",
+    university:"Monash University",
+    school:"Monash Institute of Pharmaceutical Sciences (MIPS)",
+    region:"Australia",
+    research:["GPCR 药物发现","AI 药物设计","药物递送","药物代谢动力学","制药科学"],
+    tags:["药物发现","AI","药理学","2026在招"],
+    links:[
+      {label:"MIPS Find a Researcher",url:"https://www.monash.edu/pharm/research/our-researchers?faculties=%5B%22pharmacy%20and%20pharmaceutical%20sciences%22%5D&phdCandidate=&selectedLevels=%5B%5D&queryText=",icon:"🏛️"},
+      {label:"MIPS PhD Program",url:"https://www.monash.edu/mips/themes/drug-discovery-biology/labs/cardio-metabolic-physiology/phd-program",icon:"🎓"},
+      {label:"Monash Pharm PhD Apply",url:"https://www.monash.edu/pharm/research/doctoral-program/how-to-apply-for-our-doctoral-program",icon:"📋"}
+    ],
+    status:"hot",
+    statusText:"🔥 澳洲第一药学院——多方向在招",
+    note:"MIPS 是澳洲药学 No.1。Drug Discovery Biology 方向包括 GPCR 药物发现 (AI+深度学习)、Cardio-metabolic 药理、药物递送系统。生信背景可切入 AI 药物设计。"
+  },
+  {
+    id:"au-18",
+    name:"UQ IMB — Single Cell Genomics & Complex Disease",
+    title:"Institute for Molecular Bioscience — Integrating single-cell genomics with complex disease genetics",
+    university:"University of Queensland (UQ)",
+    school:"Institute for Molecular Bioscience (IMB)",
+    region:"Australia",
+    research:["单细胞基因组学","复杂疾病遗传学","GWAS 整合","eQTL","multi-omics"],
+    tags:["单细胞","基因组学","生信","2026在招"],
+    links:[
+      {label:"UQ IMB PhD Project",url:"https://study.uq.edu.au/study-options/phd-mphil-professional-doctorate/projects/integrating-single-cell-genomics-complex-disease-genetics",icon:"🎓"},
+      {label:"UQ IMB Research",url:"https://imb.uq.edu.au/research",icon:"🏛️"}
+    ],
+    status:"hot",
+    statusText:"🔥 有明确的单细胞+遗传学 PhD 项目",
+    note:"UQ IMB 是澳洲顶级分子生物学研究所。这个 PhD 项目专门做单细胞基因组+复杂疾病遗传学 (GWAS+eQTL) 整合分析。"
+  },
+  {
+    id:"au-19",
+    name:"University of Melbourne — Melbourne Bioinformatics PhD Projects",
+    title:"Multiple bioinformatics PhD projects — MDHS / Melbourne Bioinformatics",
+    university:"University of Melbourne",
+    school:"Melbourne Medical School / MDHS / Melbourne Bioinformatics",
+    region:"Australia",
+    research:["生物信息学方法开发","多组学","临床生物信息学","计算医学"],
+    tags:["单细胞","癌症","药物发现","生信"],
+    links:[
+      {label:"Melbourne Bioinformatics PhD Projects",url:"https://mdhs.unimelb.edu.au/melbournebioinformatics/teaching/phd-research-projects",icon:"🎓"},
+      {label:"UniMelb MDHS Research",url:"https://mdhs.unimelb.edu.au/research",icon:"🏛️"}
+    ],
+    status:"active",
+    statusText:"多个 PhD 项目开放——查看官网",
+    note:"Melbourne Bioinformatics 是 Unimelb 的生信核心平台，每年有多个 PhD 项目涵盖方法开发和临床应用。MDHS 下设多个组。"
+  },
+
+  // ===== NEW ZEALAND =====
+  {
+    id:"nz-01",
+    name:"Prof. Cristin Print",
+    title:"Professor of Molecular Medicine and Pathology, University of Auckland",
+    university:"University of Auckland",
+    school:"Faculty of Medical and Health Sciences / Maurice Wilkins Centre",
+    region:"New Zealand",
+    research:["癌症基因组学","生物信息学","转录组学","精准肿瘤学","生物标志物"],
+    tags:["癌症","基因组学","生信","精准医学"],
+    links:[
+      {label:"UoA Medical School",url:"https://www.auckland.ac.nz/en/fmhs.html",icon:"🏛️"},
+      {label:"Maurice Wilkins Centre",url:"https://www.mauricewilkinscentre.org",icon:"🔬"}
+    ],
+    status:"active",
+    statusText:"Maurice Wilkins Centre 核心 PI——可联系",
+    note:"Auckland 癌症基因组学核心人物。Maurice Wilkins Centre 是 NZ 国家癌症研究中心。做转录组/生物信息学/精准肿瘤。"
+  },
+  {
+    id:"nz-02",
+    name:"University of Auckland — Precision Cardiology PhD",
+    title:"Precision Cardiology Research Group — PhD Opportunity",
+    university:"University of Auckland",
+    school:"Faculty of Medical and Health Sciences",
+    region:"New Zealand",
+    research:["精准心脏病学","心血管基因组学","遗传心脏病","多组学"],
+    tags:["心血管","基因组学","精准医学"],
+    links:[
+      {label:"Precision Cardiology Ad (AcademicJobs)",url:"https://www.AcademicJobs.com/university-jobs/unlock-the-future-of-precision-cardiology-auckland-auckland/659139",icon:"🎓"}
+    ],
+    status:"hot",
+    statusText:"🔥 精准心脏病学 PhD 机会",
+    note:"Auckland 精准心脏病学研究组招 PhD。做遗传心脏病+多组学+精准医学。新西兰心脏病方向较少见的机会。"
+  },
+  {
+    id:"nz-03",
+    name:"A/Prof. Megan Leask",
+    title:"Associate Professor, Department of Biochemistry, University of Otago",
+    university:"University of Otago",
+    school:"School of Biomedical Sciences",
+    region:"New Zealand",
+    research:["神经内分泌学","代谢疾病","痛风遗传学","肾脏疾病","生物信息学"],
+    tags:["代谢","痛风","生信","肾脏"],
+    links:[
+      {label:"Leask Lab",url:"https://otago-uni-dev.matrix.squiz.cloud/neuroendocrinology/research/megan-leask",icon:"🌐"}
+    ],
+    status:"active",
+    statusText:"可联系套磁",
+    note:"做神经内分泌+代谢疾病 (痛风/肾病) 遗传学+生信。Otago 是 NZ 最强 biomedical 研究大学之一。"
+  },
+  {
+    id:"nz-04",
+    name:"University of Otago — Genetics / Biochemistry PhD Programme",
+    title:"Department of Biochemistry / Genetics — Multiple research groups",
+    university:"University of Otago",
+    school:"School of Biomedical Sciences",
+    region:"New Zealand",
+    research:["遗传学","基因组学","癌症生物学","表观遗传学","发育生物学"],
+    tags:["癌症","基因组学","表观组学","发育"],
+    links:[
+      {label:"Otago Biomedical Sciences",url:"https://www.otago.ac.nz/bms",icon:"🏛️"},
+      {label:"Otago PhD Scholarships",url:"https://www.otago.ac.nz/study/phd",icon:"🎓"}
+    ],
+    status:"active",
+    statusText:"NZ 最强 biomedical 研究——可查各 PI 联系",
+    note:"Otago 是新西兰 biomedical 研究 top institution。Department of Biochemistry/Genetics 有多个组做基因组学+癌症+发育。建议逐 PI 查看并套磁。"
+  },
+  {
+    id:"nz-05",
+    name:"Malaghan Institute of Medical Research — Cancer Immunotherapy",
+    title:"New Zealand's leading independent biomedical research institute",
+    university:"Affiliated with Victoria University of Wellington",
+    school:"Malaghan Institute",
+    region:"New Zealand",
+    research:["癌症免疫治疗","CAR-T 细胞","免疫学","疫苗研究","单细胞免疫组学"],
+    tags:["癌症","免疫","药物发现","单细胞"],
+    links:[
+      {label:"Malaghan Institute",url:"https://www.malaghan.org.nz",icon:"🏛️"},
+      {label:"Malaghan PhD Opportunities",url:"https://www.malaghan.org.nz/study/",icon:"🎓"}
+    ],
+    status:"active",
+    statusText:"NZ 顶级独立研究所——可联系",
+    note:"Malaghan 是新西兰独立医学生物研究所，做 CAR-T + 癌症免疫治疗 + 疫苗。与 Victoria University of Wellington 联合授予 PhD 学位。"
+  }
+];
+
+function updateStats(filtered){
+  document.getElementById('totalCount').textContent = filtered.length;
+  document.getElementById('ntuCount').textContent = filtered.filter(s=>s.region==='NTU').length;
+  document.getElementById('auCount').textContent = filtered.filter(s=>s.region==='Australia').length;
+  document.getElementById('nzCount').textContent = filtered.filter(s=>s.region==='New Zealand').length;
+  document.getElementById('openCount').textContent = filtered.filter(s=>s.status==='hot').length;
+}
+
+function renderCards(sups){
+  const grid = document.getElementById('cardGrid');
+  if(sups.length===0){
+    grid.innerHTML=`<div class="empty"><div class="big">🔍</div><p>没有匹配的导师，试试调整筛选条件</p></div>`;
+    updateStats([]);return;
+  }
+  updateStats(sups);
+  grid.innerHTML = sups.map(s=>{
+    const uniClass = s.region==='NTU'?'uni-ntu':s.region==='Australia'?'uni-au':'uni-nz';
+    const statusClass = s.status==='hot'?'status-open':s.status==='active'?'status-active':'status-hot';
+    const flag = s.region==='NTU'?'🇸🇬':s.region==='Australia'?'🇦🇺':'🇳🇿';
+    return `
+    <div class="card" data-region="${s.region}" data-tags="${s.tags.join(',')}">
+      <span class="uni-badge ${uniClass}">${flag} ${s.university}</span>
+      <h3>${s.name}</h3>
+      <div class="title">${s.title}</div>
+      <div class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="links">${s.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener"><span class="fa-icon">${l.icon}</span>${l.label}</a>`).join('')}</div>
+      <div class="status ${statusClass}">${s.statusText}</div>
+      ${s.note?`<div class="note">💡 ${s.note}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+let currentRegion='all', currentTag='all';
+
+function filterAll(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const filtered = supervisors.filter(s=>{
+    const matchRegion = currentRegion==='all'||s.region===currentRegion;
+    const matchTag = currentTag==='all'||s.tags.includes(currentTag);
+    const matchSearch = !q||(s.name.toLowerCase().includes(q)||s.university.toLowerCase().includes(q)||s.research.some(r=>r.toLowerCase().includes(q))||s.tags.some(t=>t.toLowerCase().includes(q))||(s.note&&s.note.toLowerCase().includes(q)));
+    return matchRegion&&matchTag&&matchSearch;
+  });
+  renderCards(filtered);
+}
+
+document.querySelectorAll('.region-tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.region-tab').forEach(bb=>bb.classList.remove('active'));
+  b.classList.add('active');currentRegion=b.dataset.region;filterAll();
+}));
+document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filter-btn').forEach(bb=>bb.classList.remove('active'));
+  b.classList.add('active');currentTag=b.dataset.tag;filterAll();
+}));
+document.getElementById('searchInput').addEventListener('input',filterAll);
+
+renderCards(supervisors);
+</script>
+
+</body>
+</html>
