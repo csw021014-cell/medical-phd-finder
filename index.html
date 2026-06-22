@@ -498,9 +498,10 @@ body {
       <input type="text" id="searchInput" placeholder="搜索导师姓名、研究方向、大学…">
     </div>
     <button class="filter-btn active" data-tag="all">全部</button>
-    <button class="filter-btn" data-tag="宏基因组">🧬 宏基因组</button>
-    <button class="filter-btn" data-tag="水处理">💧 水处理</button>
-    <button class="filter-btn" data-tag="AMR">🦠 AMR</button>
+    <button class="filter-btn" data-tag="单细胞">🧪 单细胞组学</button>
+    <button class="filter-btn" data-tag="癌症">🎗️ 癌症</button>
+    <button class="filter-btn" data-tag="药物发现">💊 药物发现</button>
+    <button class="filter-btn" data-tag="神经">🧠 神经退行</button>
     <button class="filter-btn" data-tag="生信">🖥️ 生信</button>
     <button class="filter-btn" data-tag="2026在招">🔥 2026 在招</button>
   </div>
@@ -537,7 +538,7 @@ body {
         <ul>
           <li>标题带关键词：<em>"PhD Enquiry – Environmental Microbiology / Water Treatment – [Your Name]"</em></li>
           <li>第一段：一句话说你是谁 + 为什么对这个组感兴趣（引用导师 1–2 篇具体论文）</li>
-          <li>第二段：你的研究经历亮点（匹配他们方向的关键技能：宏基因组分析、反应器运行、生信工具开发…）</li>
+          <li>第二段：你的研究经历亮点（匹配他们方向的关键技能：单细胞分析、空间组学、生物信息学 pipeline 开发…）</li>
           <li>附件：CV + 成绩单，不要发大文件；24h 没回可以 5 天后 follow-up</li>
         </ul>
       </div>
@@ -553,8 +554,8 @@ body {
       <div class="advice-card">
         <h4><span class="num">4</span> 选导师优先级建议</h4>
         <ul>
-          <li>🔴 <strong>优先套磁（2026 明确在招/有钱）：</strong>QUT Ashbolt (4 个全奖)、Auckland Singhal (3 个 Marsden 全奖)、NTU Xiaole Yin (新 AP 有钱)</li>
-          <li>🟡 <strong>高匹配 + 有经费历史：</strong>UQ Jianhua Guo ($14M 经费)、UNSW Bing-Jie Ni (h=102, 大组)、RMIT Andy Ball (ARC Training Centre)</li>
+          <li>🔴 <strong>优先套磁（2026 明确在招/有钱）：</strong>Garvan Weatheritt (2 个项目年招)、WEHI Chen (NHMRC 资助)、Garvan Masle-Farquhar (NHMRC $688k)</li>
+          <li>🟡 <strong>高匹配 + 有经费历史：</strong>Garvan Swarbrick (Broad Institute 合作)、WEHI Papenfuss (多组学)、Baker El-Osta (表观组学)</li>
           <li>🟢 <strong>值得投石问路：</strong>所有列为 "活跃/可联系" 的导师——很多没有公开广告但在招人</li>
           <li>优先找近几年拿到大经费的 (ARC DECRA/Future/Discovery, Marsden, MOE Tier 2) + 课题组主页有 PhD 空缺广告的</li>
         </ul>
@@ -1119,7 +1120,7 @@ function renderCards(sups) {
       </div>
       <div class="links">
         ${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener"><span class="fa-icon">${l.icon}</span> ${l.label}</a>`).join('')}
-        ${s.email ? '<a href="mailto:' + s.email + '?subject=Asking%20for%20PhD%20Position" style="color:#0072c6" onclick="window.open('ms-outlook://compose?to='+encodeURIComponent(s.email)+'&subject=Asking%20for%20PhD%20Position','_blank');return!1"><span class="fa-icon">📧</span>' + s.email + '</a>' : ''}
+        ${s.email ? '<a href="mailto:' + s.email + '?subject=Asking%20for%20PhD%20Position"><span class="fa-icon">📧</span>' + s.email + '</a>' : ''}
       </div>
       <div class="status ${statusClass}">${s.statusText}</div>
       ${s.note ? `<div class="note">💡 ${s.note}</div>` : ''}
