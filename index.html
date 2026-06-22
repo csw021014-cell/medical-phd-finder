@@ -811,7 +811,7 @@ function renderCards(sups){
     const statusClass = s.status==='hot'?'status-open':s.status==='active'?'status-active':'status-hot';
     const flag = s.region==='NTU'?'🇸🇬':s.region==='Australia'?'🇦🇺':'🇳🇿';
     return `
-    <div class="card" data-region="${s.region}" data-tags="${s.tags.join(',')}">
+    <div class="card" data-sid="${s.id}" data-region="${s.region}" data-tags="${s.tags.join(',')}">
       <span class="uni-badge ${uniClass}">${flag} ${s.university}</span>
       <h3>${s.name}</h3>
       <div class="title">${s.title}</div>
@@ -861,13 +861,6 @@ window.runEval = async function() {
   document.getElementById('evalBtn').disabled = true;
   document.getElementById('evalPanel').classList.add('active');
   
-  // Ensure cards have data-sid for score matching
-  const allCards = document.querySelectorAll('.card');
-  if (!allCards[0] || !allCards[0].dataset.sid) {
-    const sups = window._currentSups || window._allSupervisors || [];
-    allCards.forEach((card, i) => { if (sups[i]) card.dataset.sid = sups[i].id; });
-  }
-
   try {
     const resp = await fetch(EVAL_API, {
       method: 'POST',
