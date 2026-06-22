@@ -875,6 +875,7 @@ document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',(
 document.getElementById('searchInput').addEventListener('input',filterAll);
 
 renderCards(supervisors);
+window._currentSups = supervisors;
 
 // === AI Evaluation ===
 const EVAL_API = 'https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate';
@@ -921,7 +922,7 @@ window.runEval = async function() {
   // Ensure cards have data-sid for score matching
   const allCards = document.querySelectorAll('.card');
   if (!allCards[0] || !allCards[0].dataset.sid) {
-    const sups = window._currentSups || [];
+    const sups = window._currentSups || supervisors;
     allCards.forEach((card, i) => { if (sups[i]) card.dataset.sid = sups[i].id; });
   }
 
