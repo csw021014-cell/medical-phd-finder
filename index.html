@@ -57,6 +57,32 @@ body{
 
 .container{max-width:1320px;margin:0 auto;padding:0 20px}
 
+/* Eval Panel */
+.eval-panel{background:var(--card-bg);border-radius:20px;padding:24px 28px;box-shadow:0 2px 16px rgba(0,0,0,.04);margin:20px auto;max-width:1320px;border:2px solid var(--border);}
+.eval-panel.active{border-color:#7c3aed;}
+.eval-panel h3{font-size:1.05rem;font-weight:700;margin-bottom:12px;color:#1a0a14;}
+.eval-form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.eval-form textarea{flex:2 1 400px;min-height:80px;padding:12px;border-radius:12px;border:2px solid var(--border);font-size:.88rem;font-family:inherit;resize:vertical;outline:none;}
+.eval-form textarea:focus{border-color:#7c3aed;}
+.eval-form select{padding:10px 14px;border-radius:12px;border:2px solid var(--border);font-size:.85rem;background:white;}
+.eval-form button{padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;border:none;font-weight:700;cursor:pointer;font-size:.92rem;white-space:nowrap;}
+.eval-form button:disabled{opacity:.5;cursor:not-allowed;}
+.eval-spinner{display:none;text-align:center;padding:16px;}
+.eval-spinner.visible{display:block;}
+.eval-spinner .spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:#7c3aed;border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.card .score-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;font-size:.78rem;margin-top:6px;}
+.score-high{background:#d1fae5;color:#065f46;}
+.score-mid{background:#fef3c7;color:#92400e;}
+.score-low{background:#fee2e2;color:#991b1b;}
+.card .detail-link{font-size:.75rem;color:#7c3aed;cursor:pointer;margin-top:4px;display:inline-block;}
+.card .detail-link:hover{text-decoration:underline;}
+.eval-results{display:none;background:var(--card-bg);border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.04);margin:20px auto;max-width:1320px;}
+.eval-results.visible{display:block;}
+.eval-results h2{color:#7c3aed;font-size:1.15rem;margin:18px 0 8px;}
+.eval-results h2:first-child{margin-top:0;}
+.eval-results p,.eval-results li{line-height:1.7;}
+
 /* Stats */
 .stats-bar{
   display:flex;justify-content:center;gap:28px;flex-wrap:wrap;padding:20px 0;margin-top:-20px;position:relative;z-index:2;
@@ -190,12 +216,28 @@ footer{text-align:center;padding:28px;font-size:.78rem;color:var(--text-muted)}
 
 </header>
 
-<!-- CTA Banner -->
-<div class="container" style="margin-top:-12px;position:relative;z-index:10">
-  <a href="evaluate.html" style="display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#1a0a14;padding:16px 24px;border-radius:16px;text-decoration:none;font-weight:700;font-size:1.05rem;box-shadow:0 4px 20px rgba(245,158,11,.3);transition:transform .15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
-    🤖 <span>AI 智能评估你的 PhD 录取概率</span> <span style="opacity:.7">→</span>
-  </a>
-  <p style="text-align:center;font-size:.78rem;color:#6b5b63;margin-top:8px">基于 DeepSeek，粘贴背景信息即可获取 NTU/澳洲/新西兰 PhD 录取分析报告</p>
+<!-- AI Eval Panel -->
+<div class="container" style="position:relative;z-index:10">
+  <div class="eval-panel" id="evalPanel">
+    <h3>🤖 AI 录取概率评估 <span style="font-weight:400;font-size:.78rem">— 上传 PDF 简历，AI 自动分析，结果直接显示在导师卡片上</span></h3>
+    <div class="eval-form">
+      <label style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:2px dashed #c4b5d0;cursor:pointer;font-weight:600;font-size:.88rem;color:#7c3aed;background:#faf5ff;white-space:nowrap">
+        📄 上传 PDF 简历 <input type="file" accept=".pdf" id="pdfInput" style="display:none" onchange="handlePDF(event)">
+      </label>
+      <button onclick="var t=document.getElementById('evalBgInput');t.style.display=t.style.display==='none'?'block':'none'" style="padding:12px 22px;border-radius:12px;border:2px solid var(--border);background:white;font-weight:600;cursor:pointer;font-size:.88rem;white-space:nowrap">✏️ 或手动输入</button>
+      <select id="evalRegion">
+        <option value="all">全部地区</option>
+        <option value="NTU">🇸🇬 NTU</option>
+        <option value="Australia">🇦🇺 澳洲</option>
+        <option value="New Zealand">🇳🇿 新西兰</option>
+      </select>
+      <button id="evalBtn" onclick="runEval()">🚀 开始评估</button>
+    </div>
+    <textarea id="evalBgInput" placeholder="粘贴背景：学校、GPA、论文、技能、语言成绩…" style="display:none;margin-top:12px"></textarea>
+    <span id="pdfStatus" style="font-size:.8rem;color:#059669;display:none;margin-top:8px"></span>
+    <div class="eval-spinner" id="evalSpinner"><div class="spinner"></div> DeepSeek AI 分析中…（约 20 秒）</div>
+  </div>
+  <div class="eval-results" id="evalResults"></div>
 </div>
 
 <div class="container">
