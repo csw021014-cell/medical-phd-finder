@@ -37,6 +37,7 @@ footer{text-align:center;padding:28px;font-size:.78rem;color:var(--muted)}
 .sup-card{background:#f8fafc;border-radius:12px;padding:14px 18px;margin:10px 0;border:1px solid #e2e8f0}
 .sup-card strong{color:#1e293b}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <header>
@@ -45,9 +46,16 @@ footer{text-align:center;padding:28px;font-size:.78rem;color:var(--muted)}
 </header>
 
 <div class="container">
-  <a href="index.html" class="back-link">← 返回导师库</a>
+  <a href="./" class="back-link">← 返回导师库</a>
 
-  <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。例如：
+  <div style="margin:16px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <label style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:2px dashed #c4b5d0;cursor:pointer;font-weight:600;font-size:.9rem;color:#7c3aed;background:#faf5ff">
+        📄 上传 PDF 简历 <input type="file" accept=".pdf" id="pdfInput" style="display:none" onchange="handlePDF(event)">
+      </label>
+      <span style="font-size:.8rem;color:#94a3b8">或直接粘贴文字</span>
+      <span id="pdfStatus" style="font-size:.8rem;color:#059669;display:none"></span>
+    </div>
+    <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。例如：
 
 教育背景：本科/硕士学校、专业、GPA
 科研经历：研究方向、项目、掌握的实验/分析方法
@@ -177,6 +185,27 @@ function renderResults(r) {
   }
 
   document.getElementById('results').innerHTML = html;
+}
+
+
+// PDF handling
+async function handlePDF(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('pdfStatus').style.display = 'inline';
+  document.getElementById('pdfStatus').textContent = '解析 PDF 中…';
+  
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  document.getElementById('bgInput').value = text.trim();
+  document.getElementById('pdfStatus').textContent = '✅ PDF 已解析 (' + text.length + ' 字)';
+  localStorage.setItem('phd-eval-bg', text.trim());
 }
 
 // Save/restore background from localStorage
