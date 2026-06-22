@@ -43,6 +43,17 @@ body{
   padding:7px 16px;border-radius:999px;font-size:.8rem;font-weight:600;
   border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);backdrop-filter:blur(6px);
 }
+.eval-hero-btn{
+  display:inline-block;margin-top:20px;position:relative;
+  padding:14px 32px;border-radius:999px;
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+  color:#1a0a14;font-size:.95rem;font-weight:700;
+  text-decoration:none;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 20px rgba(245,158,11,.35);
+}
+.eval-hero-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(245,158,11,.5)}
+.eval-note{font-size:.75rem;opacity:.55;margin-top:8px;position:relative}
+
 
 .container{max-width:1320px;margin:0 auto;padding:0 20px}
 
@@ -175,6 +186,8 @@ footer{text-align:center;padding:28px;font-size:.78rem;color:var(--text-muted)}
     <span class="badge">🖥️ 计算生物学</span>
     <span class="badge">🧫 空间组学</span>
   </div>
+  <a href="evaluate.html" class="eval-hero-btn">🤖 AI 智能评估你的录取概率 →</a>
+  <div class="eval-note">基于 DeepSeek，粘贴背景即可获得 NTU/澳洲/新西兰 PhD 录取分析</div>
 </header>
 
 <div class="container">
