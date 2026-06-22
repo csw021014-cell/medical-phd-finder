@@ -1120,7 +1120,7 @@ function renderCards(sups) {
       </div>
       <div class="links">
         ${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener"><span class="fa-icon">${l.icon}</span> ${l.label}</a>`).join('')}
-        ${s.email ? '<a href="mailto:' + s.email + '?subject=Asking%20for%20PhD%20Position" onclick="var w=window.open(\'ms-outlook://compose?to=\'+encodeURIComponent(\''+s.email+'\')+\'&subject=Asking%20for%20PhD%20Position\',\'_blank\');if(!w||w.closed){return true;}return false;"><span class="fa-icon">📧</span>Outlook: ' + s.email + '</a>' : ''}
+        ${s.email ? '<a href="ms-outlook://compose?to=' + encodeURIComponent(s.email) + '&subject=Asking%20for%20PhD%20Position"><span class="fa-icon">📧</span>Outlook: ' + s.email + '</a>' : ''}
       </div>
       <div class="status ${statusClass}">${s.statusText}</div>
       ${s.note ? `<div class="note">💡 ${s.note}</div>` : ''}
