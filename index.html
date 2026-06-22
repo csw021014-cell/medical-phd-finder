@@ -911,6 +911,20 @@ window.runEval = async function() {
   document.getElementById('evalBtn').disabled = true;
   document.getElementById('evalPanel').classList.add('active');
   
+  // Ensure cards have data-sid
+  const allCards = document.querySelectorAll('.card');
+  if (!allCards[0] || !allCards[0].dataset.sid) {
+    const sups = window._currentSups || [];
+    allCards.forEach((card, i) => { if (sups[i]) card.dataset.sid = sups[i].id; });
+  }
+  
+  // Ensure cards have data-sid for score matching
+  const allCards = document.querySelectorAll('.card');
+  if (!allCards[0] || !allCards[0].dataset.sid) {
+    const sups = window._currentSups || [];
+    allCards.forEach((card, i) => { if (sups[i]) card.dataset.sid = sups[i].id; });
+  }
+
   try {
     const resp = await fetch(EVAL_API, {
       method: 'POST',
