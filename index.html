@@ -875,6 +875,151 @@ document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',(
 document.getElementById('searchInput').addEventListener('input',filterAll);
 
 renderCards(supervisors);
+
+// === AI Evaluation ===
+const EVAL_API = 'https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate';
+let evalDone = false;
+
+async function handlePDF(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('pdfStatus').style.display = 'block';
+  document.getElementById('pdfStatus').textContent = '解析 PDF 中…';
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(item => item.str).join(' ') + '\n';
+    }
+    document.getElementById('evalBgInput').value = text.trim();
+    document.getElementById('evalBgInput').style.display = 'block';
+    document.getElementById('pdfStatus').textContent = '✅ PDF 已解析 — ' + text.length + ' 字';
+    document.getElementById('evalPanel').classList.add('active');
+  } catch(e) {
+    document.getElementById('pdfStatus').textContent = '❌ 解析失败，请手动粘贴文字';
+  }
+}
+
+window.runEval = async function() {
+  const bg = document.getElementById('evalBgInput').value.trim();
+  if (!bg || bg.length < 20) { alert('请先上传 PDF 或手动输入至少 20 字背景信息'); return; }
+  
+  document.getElementById('evalSpinner').classList.add('visible');
+  document.getElementById('evalBtn').disabled = true;
+  document.getElementById('evalPanel').classList.add('active');
+  
+  try {
+    const resp = await fetch(EVAL_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        background: bg,
+        target_region: document.getElementById('evalRegion').value,
+        target_direction: 'medical',
+        supervisors: supervisors.map(s => ({id: s.id, name: s.name, university: s.university, tags: s.tags.join(',')}))
+      })
+    });
+    const data = await resp.json();
+    if (data.error) { alert('错误: ' + data.error); return; }
+    const r = data.result;
+    if (r.raw) { alert(r.raw); return; }
+    evalDone = true;
+    window._evalDetails = r.supervisor_scores || {};
+    
+    if (r.supervisor_scores) {
+      for (const [id, ss] of Object.entries(r.supervisor_scores)) {
+        const cards = document.querySelectorAll('.card');
+        for (const card of cards) {
+          if (card.dataset.sid === id) {
+            const pct = ss.score || 0;
+            const cls = pct >= 70 ? 'score-high' : pct >= 40 ? 'score-mid' : 'score-low';
+            const status = card.querySelector('.status');
+            const badge = document.createElement('span');
+            badge.className = 'score-badge ' + cls;
+            badge.textContent = '🎯 录取概率: ' + pct + '%';
+            badge.style.cssText = 'display:block;margin-top:4px;';
+            status.parentNode.insertBefore(badge, status.nextSibling);
+            if (ss.note) {
+              const link = document.createElement('span');
+              link.className = 'detail-link';
+              link.textContent = '📋 AI 详细分析';
+              link.onclick = function() { showDetail(id); };
+              badge.parentNode.insertBefore(link, badge.nextSibling);
+            }
+            break;
+          }
+        }
+      }
+    }
+    
+    const el = document.getElementById('evalResults');
+    let html = '<h2>📊 AI 评估结果</h2>';
+    const score = r.overall_score || 0;
+    const cls = score >= 70 ? 'score-high' : score >= 45 ? 'score-mid' : 'score-low';
+    html += '<p>整体竞争力：<strong class="score-badge ' + cls + '">' + score + '/100</strong> ' + (r.overall_analysis||'') + '</p>';
+    if (r.region_scores) {
+      for (const [region, s] of Object.entries(r.region_scores)) {
+        const c2 = s >= 70 ? 'score-high' : s >= 40 ? 'score-mid' : 'score-low';
+        html += ' <span class="score-badge ' + c2 + '">' + region + ' ' + s + '%</span> ';
+      }
+    }
+    if (r.strengths?.length) html += '<p><strong>✅</strong> ' + r.strengths.join('；') + '</p>';
+    if (r.weaknesses?.length) html += '<p><strong>⚠️</strong> ' + r.weaknesses.join('；') + '</p>';
+    if (r.suggestions?.length) html += '<p><strong>💡</strong> ' + r.suggestions.slice(0,3).join('；') + '</p>';
+    el.innerHTML = html;
+    el.classList.add('visible');
+    
+    const firstBadge = document.querySelector('.score-badge');
+    if (firstBadge) firstBadge.scrollIntoView({behavior: 'smooth', block: 'center'});
+  } catch(e) {
+    alert('网络错误: ' + e.message);
+  } finally {
+    document.getElementById('evalSpinner').classList.remove('visible');
+    document.getElementById('evalBtn').disabled = false;
+  }
+};
+
+window.showDetail = function(supId) {
+  const d = window._evalDetails?.[supId];
+  if (!d) return;
+  let modal = document.getElementById('detailModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'detailModal';
+    modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;justify-content:center;align-items:center';
+    modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; };
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = '<div style="background:white;border-radius:20px;padding:28px;max-width:600px;max-height:80vh;overflow-y:auto;margin:20px">' +
+    '<button style="float:right;background:none;border:none;font-size:1.5rem;cursor:pointer" onclick="document.getElementById(\'detailModal\').style.display=\'none\'">&times;</button>' +
+    '<h3>📋 详细分析</h3><p>录取概率：<strong>' + (d.score||0) + '%</strong></p><p>' + (d.note||'') + '</p></div>';
+  modal.style.display = 'flex';
+};
+
+const origRender = renderCards;
+renderCards = function(sups) {
+  origRender(sups);
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card, i) => { if (sups[i]) card.dataset.sid = sups[i].id; });
+  if (evalDone && window._evalDetails) {
+    for (const [id, ss] of Object.entries(window._evalDetails)) {
+      const card = document.querySelector('.card[data-sid="' + id + '"]');
+      if (card && !card.querySelector('.score-badge')) {
+        const pct = ss.score || 0;
+        const cls = pct >= 70 ? 'score-high' : pct >= 40 ? 'score-mid' : 'score-low';
+        const status = card.querySelector('.status');
+        const badge = document.createElement('span');
+        badge.className = 'score-badge ' + cls;
+        badge.textContent = '🎯 ' + pct + '%';
+        status.parentNode.insertBefore(badge, status.nextSibling);
+      }
+    }
+  }
+};
+
 </script>
 
 </body>
