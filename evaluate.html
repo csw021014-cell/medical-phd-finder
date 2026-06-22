@@ -3,391 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🤖 AI 博士申请评估 — NTU · 澳洲 · 新西兰</title>
+<title>🤖 AI 博士申请评估</title>
 <style>
-:root {
-  --bg: #faf9f7;
-  --card: #fff;
-  --accent: #7c3aed;
-  --accent-light: #a78bfa;
-  --accent-soft: #ede9fe;
-  --text: #1a1225;
-  --text-muted: #6b5b7a;
-  --border: #e4dcec;
-  --green: #059669;
-  --amber: #d97706;
-  --red: #dc2626;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
-  background: var(--bg); color: var(--text); line-height: 1.6;
-}
-
-/* Header */
-header {
-  background: linear-gradient(135deg, #1a0a30 0%, #3b1f70 50%, #7c3aed 100%);
-  color: white; padding: 48px 20px 36px; text-align: center;
-}
-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; margin-bottom: 8px; }
-header p { opacity: .85; font-size: .95rem; }
-header .note {
-  margin-top: 16px; font-size: .78rem; opacity: .65;
-  background: rgba(255,255,255,.1); display: inline-block;
-  padding: 6px 16px; border-radius: 999px;
-}
-
-/* Layout */
-.container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
-
-/* Input Section */
-.input-section { padding: 36px 0 20px; }
-textarea {
-  width: 100%; min-height: 220px; padding: 18px; border-radius: 16px;
-  border: 2px solid var(--border); font-size: .92rem; line-height: 1.7;
-  font-family: inherit; resize: vertical; outline: none; transition: border-color .2s;
-}
-textarea:focus { border-color: var(--accent); }
-textarea::placeholder { color: #c4b5d0; }
-.char-count { text-align: right; font-size: .78rem; color: var(--text-muted); margin-top: 4px; }
-
-/* Controls */
-.controls {
-  display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
-  margin: 16px 0 24px;
-}
-.control-group { display: flex; flex-direction: column; gap: 4px; }
-.control-group label { font-size: .78rem; font-weight: 600; color: var(--text-muted); }
-.control-group select {
-  padding: 10px 14px; border-radius: 12px; border: 2px solid var(--border);
-  font-size: .88rem; outline: none; background: white; cursor: pointer;
-  min-width: 180px;
-}
-.control-group select:focus { border-color: var(--accent); }
-
-/* Tips */
-.tips {
-  background: var(--accent-soft); border-radius: 14px; padding: 16px 20px;
-  margin-bottom: 20px; font-size: .82rem; color: var(--text-muted);
-  display: flex; gap: 12px; align-items: flex-start;
-}
-.tips .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-
-/* Button */
-.submit-btn {
-  display: block; width: 100%; padding: 16px; border-radius: 14px;
-  background: linear-gradient(135deg, #7c3aed, #a855f7); color: white;
-  border: none; font-size: 1.05rem; font-weight: 700; cursor: pointer;
-  transition: transform .15s, box-shadow .15s; margin-bottom: 36px;
-}
-.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(124,58,237,.3); }
-.submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-/* Results */
-.results {
-  background: var(--card); border-radius: 20px; padding: 0;
-  box-shadow: 0 2px 20px rgba(0,0,0,.05); border: 1px solid var(--border);
-  margin-bottom: 48px; display: none; overflow: hidden;
-}
-.results.visible { display: block; }
-.results-header {
-  background: linear-gradient(135deg, #1a0a30, #3b1f70);
-  color: white; padding: 20px 24px;
-}
-.results-header h3 { font-size: 1.1rem; font-weight: 700; }
-.results-body { padding: 24px; }
-.results-body h2 { font-size: 1.2rem; font-weight: 700; margin: 24px 0 12px; color: var(--accent); }
-.results-body h2:first-child { margin-top: 0; }
-.results-body h3 { font-size: 1.05rem; font-weight: 700; margin: 18px 0 8px; }
-.results-body p { margin-bottom: 10px; line-height: 1.75; }
-.results-body ul, .results-body ol { padding-left: 22px; margin-bottom: 12px; }
-.results-body li { margin-bottom: 6px; line-height: 1.65; }
-.results-body strong { color: var(--accent); }
-.results-body em { background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; font-style: normal; }
-
-/* Loading */
-.loading {
-  display: none; text-align: center; padding: 48px 20px;
-}
-.loading.visible { display: block; }
-.spinner {
-  display: inline-block; width: 48px; height: 48px;
-  border: 4px solid var(--border); border-top-color: var(--accent);
-  border-radius: 50%; animation: spin .8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading p { margin-top: 16px; color: var(--text-muted); font-size: .92rem; }
-
-.error-msg {
-  display: none; background: #fef2f2; border: 1px solid #fecaca;
-  border-radius: 14px; padding: 16px 20px; margin-bottom: 24px;
-  color: #991b1b; font-size: .9rem;
-}
-.error-msg.visible { display: block; }
-
-/* Server banner */
-.server-banner { background: #fff7ed; border: 2px solid #fdba74; border-radius: 16px; padding: 18px 22px; margin-bottom: 24px; }
-.server-banner-inner strong { color: #c2410c; }
-.server-banner-inner p { margin: 6px 0; color: #9a3412; font-size: .88rem; }
-.server-banner-inner code { display: block; background: #1e293b; color: #38bdf8; padding: 10px 14px; border-radius: 8px; font-size: .85rem; margin: 8px 0; word-break: break-all; }
-.server-banner .copy-btn { background: #ea580c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: .82rem; }
-.server-banner .small { font-size: .78rem; color: #9a3412; margin-top: 4px; }
-.content-hidden { opacity: .3; pointer-events: none; }
-
-/* Back link */
-.back-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  color: var(--accent); text-decoration: none; font-weight: 600;
-  font-size: .9rem; margin-bottom: 16px;
-}
-.back-link:hover { text-decoration: underline; }
-
-footer { text-align: center; padding: 28px; font-size: .78rem; color: var(--text-muted); }
-
-@media (max-width: 640px) {
-  .controls { flex-direction: column; }
-  .control-group select { width: 100%; }
-}
+:root{--bg:#faf9f7;--card:#fff;--accent:#7c3aed;--border:#e4dcec;--text:#1a1225;--muted:#6b5b7a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+header{background:linear-gradient(135deg,#1a0a30,#3b1f70,#7c3aed);color:white;padding:48px 20px 36px;text-align:center}
+header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin-bottom:8px}
+header p{opacity:.85;font-size:.95rem}
+.container{max-width:800px;margin:0 auto;padding:0 20px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-weight:600;font-size:.9rem;margin:16px 0;display:inline-block}
+.back-link:hover{text-decoration:underline}
+textarea{width:100%;min-height:200px;padding:18px;border-radius:16px;border:2px solid var(--border);font-size:.92rem;line-height:1.7;font-family:inherit;resize:vertical;outline:none;margin-top:16px}
+textarea:focus{border-color:var(--accent)}
+.controls{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}
+.controls select{padding:10px 14px;border-radius:12px;border:2px solid var(--border);font-size:.88rem;min-width:160px}
+.submit-btn{display:block;width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;border:none;font-size:1.05rem;font-weight:700;cursor:pointer;margin:16px 0}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,.3)}
+.results{background:var(--card);border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(0,0,0,.05);margin-bottom:48px;display:none;line-height:1.8}
+.results.visible{display:block}
+.results h2{color:var(--accent);margin:20px 0 10px;font-size:1.15rem}
+.results h2:first-child{margin-top:0}
+.loading{display:none;text-align:center;padding:32px}
+.loading.visible{display:block}
+.spinner{display:inline-block;width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{text-align:center;padding:28px;font-size:.78rem;color:var(--muted)}
+.score-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;font-size:.82rem;margin-left:8px}
+.score-high{background:#d1fae5;color:#065f46}
+.score-mid{background:#fef3c7;color:#92400e}
+.score-low{background:#fee2e2;color:#991b1b}
+.sup-card{background:#f8fafc;border-radius:12px;padding:14px 18px;margin:10px 0;border:1px solid #e2e8f0}
+.sup-card strong{color:#1e293b}
 </style>
 </head>
 <body>
-
 <header>
   <h1>🤖 AI 博士申请录取评估</h1>
-  <p>基于 DeepSeek AI 分析你的背景，评估 NTU · 澳洲 · 新西兰 PhD 录取概率</p>
-  <div class="note">🔒 API Key 仅存后端，不上传前端 · 数据不会保留</div>
+  <p>粘贴你的背景信息，DeepSeek AI 即时评估 NTU/澳洲/新西兰 PhD 录取概率</p>
 </header>
 
 <div class="container">
-  <a href="/" class="back-link">← 返回导师库</a>
+  <a href="index.html" class="back-link">← 返回导师库</a>
 
-  <section class="input-section">
-    <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。建议包含：
+  <textarea id="bgInput" placeholder="请粘贴你的背景信息，越详细评估越准确。例如：
 
-📌 教育背景：本科/硕士学校、专业、GPA、排名
-📌 科研经历：研究方向、参与项目、掌握的实验/分析方法
-📌 发表论文：期刊名称、作者顺序、影响因子
-📌 技能：编程语言 (Python/R/Shell)、生信工具 (Seurat/Scanpy/edgeR…)、湿实验技能
-📌 语言成绩：TOEFL/IELTS 分数、GRE 如有
-📌 获奖/荣誉：奖学金、竞赛、荣誉称号
-📌 推荐信情况：推荐人是谁、关系如何
-📌 偏好：想去哪个地区、想跟哪位导师、有什么特殊需求
-
-示例格式（随便写、不用完美排版）：
-985 环境工程本科 GPA 3.6/4.0，硕士同专业方向水处理微生物，有一篇 Water Research 共一 (IF 11.4)，会 R/Python 单细胞分析流程，IELTS 7.0，想申 UQ Jianhua Guo 或 Garvan Institute 的 PhD"></textarea>
-    <div class="char-count"><span id="charCount">0</span> 字</div>
-  </section>
-
-  <div class="tips">
-    <span class="icon">💡</span>
-    <span>写得越具体评估越准——提到具体的论文、导师名字、技能细节，AI 能给出更精准的判断。如果是中文背景直接用中文写即可。</span>
-  </div>
+教育背景：本科/硕士学校、专业、GPA
+科研经历：研究方向、项目、掌握的实验/分析方法
+论文：期刊名称、作者排序、影响因子
+技能：编程(R/Python)、生信工具(Seurat/edgeR…)
+语言：TOEFL/IELTS
+偏好：想去哪个地区、想跟哪位导师"></textarea>
 
   <div class="controls">
-    <div class="control-group">
-      <label>🎯 目标地区</label>
-      <select id="regionSelect">
-        <option value="all">全部地区</option>
-        <option value="NTU">🇸🇬 NTU 新加坡</option>
-        <option value="Australia">🇦🇺 澳大利亚</option>
-        <option value="New Zealand">🇳🇿 新西兰</option>
-      </select>
-    </div>
-    <div class="control-group">
-      <label>🔬 目标方向</label>
-      <select id="directionSelect">
-        <option value="medical" selected>🧬 药学 & 医学生信（默认）</option>
-        <option value="both">两个方向都评估</option>
-        <option value="medical">🧬 药学 & 医学生信</option>
-      </select>
-    </div>
+    <select id="regionSelect">
+      <option value="all">全部地区</option>
+      <option value="NTU">🇸🇬 NTU 新加坡</option>
+      <option value="Australia">🇦🇺 澳大利亚</option>
+      <option value="New Zealand">🇳🇿 新西兰</option>
+    </select>
+    <select id="directionSelect">
+      <option value="medical" selected>🧬 药学 & 医学生信</option>
+      <option value="environmental">🌊 环境微生物 & 水处理</option>
+      <option value="both">两个方向都评估</option>
+    </select>
   </div>
 
-  <button class="submit-btn" id="submitBtn" onclick="evaluate()">
-    🚀 开始 AI 评估
-  </button>
+  <button class="submit-btn" id="submitBtn" onclick="evaluate()">🚀 开始 AI 评估</button>
 
-  <div class="error-msg" id="errorMsg"></div>
   <div class="loading" id="loading">
     <div class="spinner"></div>
-    <p>DeepSeek AI 正在分析你的背景…<br><small>通常需要 15-30 秒，请耐心等待</small></p>
+    <p>DeepSeek AI 正在分析你的背景…<br><small>通常需要 15-30 秒</small></p>
   </div>
 
-  <div class="results" id="results">
-    <div class="results-header">
-      <h3>📊 AI 评估报告</h3>
-    </div>
-    <div class="results-body" id="resultsBody"></div>
-  </div>
+  <div class="results" id="results"></div>
 </div>
 
 <footer>
-  <p>评估结果由 DeepSeek AI 生成，仅供参考——最终录取结果取决于当年名额、导师经费、竞争对手等多因素</p>
-  <p style="margin-top:4px">🤖 Generated with Claude Code</p>
+  <p>评估由 DeepSeek AI 生成 · API Key 仅存后端 · 数据不会保留</p>
 </footer>
 
 <script>
-// Auto-detect server
-async function checkServer() {
-  try {
-    const resp = await fetch('/api/evaluate', {
-      method: 'OPTIONS',
-      signal: AbortSignal.timeout(2000)
-    });
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
+const API_URL = 'https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate';
+// No supervisors loaded on standalone evaluate page - will work without per-supervisor scores
+window.SUPERVISORS = [];
 
-function copyCmd() {
-  const cmd = document.getElementById('serverCmd').textContent;
-  navigator.clipboard.writeText(cmd).then(() => {
-    const btn = document.querySelector('.copy-btn');
-    btn.textContent = '✅ 已复制！';
-    setTimeout(() => btn.textContent = '📋 复制命令', 2000);
-  });
-}
+async function evaluate() {
+  const bg = document.getElementById('bgInput').value.trim();
+  if (!bg || bg.length < 20) { alert('背景信息至少 20 字'); return; }
 
-// On page load, detect server and set command path
-(async () => {
-  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const serverRunning = await checkServer();
-
-  if (!isLocal || !serverRunning) {
-    document.getElementById('serverBanner').style.display = 'block';
-    if (isLocal) {
-      document.getElementById('serverCmd').textContent = 'cd ' + window.location.pathname.replace(/\/evaluate\.html$/, '').replace(/^\//, '') + ' && python3 server.py';
-    } else {
-      // GitHub Pages - give them the clone command
-      document.getElementById('serverCmd').textContent = 'git clone https://github.com/csw021014-cell/medical-phd-finder.git && cd medical-phd-finder && python3 server.py';
-    }
-    document.getElementById('submitBtn').disabled = true;
-  }
-})();
-
-const bgInput = document.getElementById('bgInput');
-const charCount = document.getElementById('charCount');
-bgInput.addEventListener('input', () => {
-  charCount.textContent = bgInput.value.length;
-});
-
-function evaluate() {
-  const background = bgInput.value.trim();
-  if (!background) {
-    showError('请先填写背景信息');
-    return;
-  }
-  if (background.length < 50) {
-    showError('背景信息太短（至少 50 字），请写详细一些以获得更准确的评估');
-    return;
-  }
-
-  const region = document.getElementById('regionSelect').value;
-  const direction = document.getElementById('directionSelect').value;
-  const submitBtn = document.getElementById('submitBtn');
-
-  // Show loading
-  document.getElementById('errorMsg').classList.remove('visible');
-  document.getElementById('results').classList.remove('visible');
   document.getElementById('loading').classList.add('visible');
-  submitBtn.disabled = true;
-  submitBtn.textContent = '⏳ 评估中…';
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('submitBtn').disabled = true;
 
-  fetch('https://vercel-proxy-snowy-sigma.vercel.app/api/evaluate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      background: background,
-      target_region: region,
-      target_direction: direction
-    })
-  })
-  .then(resp => resp.json())
-  .then(data => {
-    document.getElementById('loading').classList.remove('visible');
-    submitBtn.disabled = false;
-    submitBtn.textContent = '🚀 开始 AI 评估';
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        background: bg,
+        target_region: document.getElementById('regionSelect').value,
+        target_direction: document.getElementById('directionSelect').value,
+        supervisors: window.SUPERVISORS || []
+      })
+    });
+    const data = await resp.json();
 
-    if (data.error) {
-      showError(data.error);
-      return;
+    if (data.error) { alert('错误: ' + data.error); return; }
+
+    const r = data.result;
+    if (r.raw) {
+      // JSON parse failed on server, show raw text
+      document.getElementById('results').innerHTML = '<pre>' + r.raw + '</pre>';
+    } else {
+      renderResults(r);
     }
-
-    showResults(data.result);
-  })
-  .catch(err => {
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  } catch(e) {
+    alert('网络错误: ' + e.message + '\n请确认能访问 vercel.app 域名');
+  } finally {
     document.getElementById('loading').classList.remove('visible');
-    submitBtn.disabled = false;
-    submitBtn.textContent = '🚀 开始 AI 评估';
-    showError('网络请求失败，请确认服务器正在运行 (python3 server.py)，然后重试。错误: ' + err.message);
-  });
+    document.getElementById('submitBtn').disabled = false;
+  }
 }
 
-function showError(msg) {
-  const el = document.getElementById('errorMsg');
-  el.textContent = '⚠️ ' + msg;
-  el.classList.add('visible');
+function renderResults(r) {
+  let html = '';
+
+  // Overall score
+  const score = r.overall_score || 0;
+  const scoreCls = score >= 70 ? 'score-high' : score >= 45 ? 'score-mid' : 'score-low';
+  html += `<h2>📊 整体竞争力：<span class="score-badge ${scoreCls}">${score}/100</span></h2>`;
+  html += `<p>${r.overall_analysis || ''}</p>`;
+
+  // Region scores
+  if (r.region_scores) {
+    html += '<h2>🌏 各地区录取概率</h2>';
+    for (const [region, s] of Object.entries(r.region_scores)) {
+      const cls = s >= 70 ? 'score-high' : s >= 40 ? 'score-mid' : 'score-low';
+      const flag = region === 'NTU' ? '🇸🇬' : region === 'Australia' ? '🇦🇺' : '🇳🇿';
+      html += `<p>${flag} <strong>${region}</strong>：<span class="score-badge ${cls}">${s}%</span> — ${r.region_analysis?.[region] || ''}</p>`;
+    }
+  }
+
+  // Strengths & weaknesses
+  if (r.strengths?.length) {
+    html += '<h2>✅ 优势</h2><ul>' + r.strengths.map(s => `<li>${s}</li>`).join('') + '</ul>';
+  }
+  if (r.weaknesses?.length) {
+    html += '<h2>⚠️ 短板</h2><ul>' + r.weaknesses.map(s => `<li>${s}</li>`).join('') + '</ul>';
+  }
+  if (r.suggestions?.length) {
+    html += '<h2>💡 提升建议</h2><ol>' + r.suggestions.map((s,i) => `<li>${s}</li>`).join('') + '</ol>';
+  }
+
+  // Per-supervisor scores
+  if (r.supervisor_scores && window.SUPERVISORS) {
+    html += '<h2>👨‍🔬 各导师录取概率</h2>';
+    const sups = window.SUPERVISORS;
+    for (const sup of sups) {
+      const ss = r.supervisor_scores[sup.id];
+      const pct = ss?.score || 0;
+      const cls = pct >= 70 ? 'score-high' : pct >= 40 ? 'score-mid' : 'score-low';
+      html += `<div class="sup-card"><strong>${sup.name}</strong> <small>${sup.university}</small> <span class="score-badge ${cls}">${pct}%</span>${ss?.note ? `<br><small style="color:#64748b">${ss.note}</small>` : ''}</div>`;
+    }
+  }
+
+  if (r.timeline) {
+    html += `<h2>📅 时间线</h2><p>${r.timeline}</p>`;
+  }
+
+  document.getElementById('results').innerHTML = html;
 }
 
-function showResults(text) {
-  const body = document.getElementById('resultsBody');
-  body.innerHTML = renderMarkdown(text);
-  document.getElementById('results').classList.add('visible');
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-}
-
-// Simple markdown to HTML renderer
-function renderMarkdown(md) {
-  let html = md;
-
-  // Escape HTML
-  html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  // Headers
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
-
-  // Bold and italic
-  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-  // Unordered lists
-  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
-
-  // Ordered lists (simple)
-  html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
-
-  // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-  // Paragraphs: double newlines
-  html = html.replace(/\n\n/g, '</p><p>');
-  html = '<p>' + html + '</p>';
-
-  // Clean up empty paragraphs and nested issues
-  html = html.replace(/<p><\/p>/g, '');
-  html = html.replace(/<p><h([23])>/g, '<h$1>');
-  html = html.replace(/<\/h([23])><\/p>/g, '</h$1>');
-  html = html.replace(/<p><ul>/g, '<ul>');
-  html = html.replace(/<\/ul><\/p>/g, '</ul>');
-
-  return html;
-}
-
-// Load saved background from localStorage
-const saved = localStorage.getItem('phd-eval-background');
-if (saved) { bgInput.value = saved; charCount.textContent = saved.length; }
-
-// Auto-save to localStorage
-bgInput.addEventListener('input', () => {
-  localStorage.setItem('phd-eval-background', bgInput.value);
+// Save/restore background from localStorage
+const saved = localStorage.getItem('phd-eval-bg');
+if (saved) document.getElementById('bgInput').value = saved;
+document.getElementById('bgInput').addEventListener('input', function() {
+  localStorage.setItem('phd-eval-bg', this.value);
 });
 </script>
-
 </body>
 </html>
