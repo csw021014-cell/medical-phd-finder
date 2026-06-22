@@ -306,7 +306,7 @@ function evaluate() {
   submitBtn.disabled = true;
   submitBtn.textContent = '⏳ 评估中…';
 
-  fetch('/api/evaluate', {
+  fetch('https://phd-eval-proxy.flawless-orange.workers.dev', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
